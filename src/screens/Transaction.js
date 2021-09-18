@@ -14,12 +14,13 @@ import search from '../assets/icons/search.png'
 import ModalComp from '../components/Modal'
 import config from '../configs'
 import CurrencyFormat from '../helpers/CurrencyFormat'
-import NameOfMonth from '../assets/dummy/NamOfMonth'
+import CustomDateTime from '../helpers/DateTime'
 
 const Transaction = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [data, setData] = useState(null)
-    const [date_time, setDate_time] = useState(null)
+    // const [date_time, setDate_time] = useState(null)
+    const [id, setId] = useState(1)
 
     useEffect(() => {
         getData()
@@ -31,46 +32,95 @@ const Transaction = ({ navigation }) => {
             .then((response) => response.json())
             .then((json) => {
                 setData(Object.values(json))
-                CustomDateTime()
+                setFilteredData(Object.values(json))
+                // CustomDateTime(data, setDate_time)
+                setId(1)
+                console.log(Object.values(json));
             })
             .catch((error) => {
                 console.error(error);
             });
+            
+        };
 
-    };
+    const SetSorting = (item) => {
+        setId(item)
+        closeModal()
+        getData()
+    }
 
-    const CustomDateTime = () => {
-        if (data) {
-            let date = null
-            let month = null
-            let year = null
+    const SetSortingAtoZ = (item) => {
+        data.sort((a, b) => {
+            let start = a.beneficiary_name.toUpperCase();
+            let end = b.beneficiary_name.toUpperCase();
+            return (start < end) ? -1 : (start > end) ? 1 : 0;
+        });
+        setData(data)
+        setId(item)
+        closeModal()
+    }
 
-            data.map((i) => {
-                return date = i.completed_at.slice(8, 10)
+    const SetSortingZtoA = (item) => {
+        data.sort((a, b) => {
+            let start = a.beneficiary_name.toUpperCase();
+            let end = b.beneficiary_name.toUpperCase();
+            return (start > end) ? -1 : (start < end) ? 1 : 0;
+        });
+        setData(data)
+        setId(item)
+        closeModal()
+    }
 
+    const SetSortingNewDate = (item) => {
+        data.sort((a, b) => {
+            let start = a.completed_at.toUpperCase();
+            let end = b.completed_at.toUpperCase();
+            return (start < end) ? -1 : (start > end) ? 1 : 0;
+        });
+        setData(data)
+        setId(item)
+        closeModal()
+    }
+
+    const SetSortingOldDate = (item) => {
+        data.sort((a, b) => {
+            let start = a.completed_at.toUpperCase();
+            let end = b.completed_at.toUpperCase();
+            return (start > end) ? -1 : (start < end) ? 1 : 0;
+        });
+        setData(data)
+        setId(item)
+        closeModal()
+    }
+
+
+    let [filteredData, setFilteredData] = useState(data);
+
+    function _searchFilterFunction(searchText, data) {
+        let newData = [];
+        if (searchText) {
+            newData = data.filter(function (item) {
+                const itemData = item.beneficiary_name.toUpperCase()
+                const itemData2 = item.beneficiary_bank.toUpperCase()
+                const itemData3 = JSON.stringify(item.amount).toUpperCase()
+
+                const textData = searchText.toUpperCase()
+
+                return itemData.includes(textData) ?
+                    itemData.includes(textData)
+                    : itemData2.includes(textData)
+                        ? itemData2.includes(textData)
+                        : itemData3.includes(textData)
             })
-
-            data.map((i) => {
-                return month = i.completed_at.slice(5, 7)
-
-            })
-
-            data.map((i) => {
-                return year = i.completed_at.slice(0, 4)
-
-            })
-
-            let dateTime = null
-
-            NameOfMonth.map((i) => {
-                if (i.id === month) {
-                    return dateTime = date + ' ' + i.name + ' ' + year
-                }
-            })
-
-            setDate_time(dateTime)
+            setFilteredData([...newData])
+        } else {
+            setFilteredData([...data])
         }
     }
+
+    console.log(filteredData)
+
+
 
     const closeModal = () => {
         setModalVisible(false)
@@ -79,7 +129,7 @@ const Transaction = ({ navigation }) => {
     const BasicPage = ({ item, onPress }) => {
         return (
             <TouchableOpacity onPress={onPress} style={styles.containeRow}>
-                <View style={[styles.left, { backgroundColor: item.status ? 'green' : 'orangered' }]} />
+                <View style={[styles.left, { backgroundColor: item.status === 'SUCCESS' ? 'green' : 'orangered' }]} />
 
                 <View style={styles.center}>
                     <View style={styles.desc}>
@@ -96,17 +146,17 @@ const Transaction = ({ navigation }) => {
                             </Text>
                             <View style={styles.dot} />
                             <Text style={styles.money}>
-                                {date_time ? date_time : 0}
+                                {CustomDateTime(data)}
                             </Text>
                         </View>
                     </View>
 
                     <View style={[styles.status, {
-                        backgroundColor: item.status && 'green',
-                        borderColor: item.status ? 'green' : 'orangered'
+                        backgroundColor: item.status === 'SUCCESS' && 'green',
+                        borderColor: item.status === 'SUCCESS' ? 'green' : 'orangered'
                     }]}>
-                        <Text style={[styles.textStatus, { color: item.status && 'white' }]}>
-                            {item.status ? 'Berhasil' : 'Pengecekan'}
+                        <Text style={[styles.textStatus, { color: item.status === 'SUCCESS' && 'white' }]}>
+                            {item.status === 'SUCCESS' ? 'Berhasil' : 'Pengecekan'}
                         </Text>
                     </View>
                 </View>
@@ -119,6 +169,12 @@ const Transaction = ({ navigation }) => {
             <ModalComp
                 modalVisible={modalVisible}
                 closeModal={closeModal}
+                id={id}
+                AtoZ={(item) => SetSortingAtoZ(item)}
+                ZtoA={(item) => SetSortingZtoA(item)}
+                newDate={(item) => SetSortingNewDate(item)}
+                oldDate={(item) => SetSortingOldDate(item)}
+                sort={(item) => SetSorting(item)}
             />
 
             <View style={styles.containerHeader}>
@@ -126,6 +182,11 @@ const Transaction = ({ navigation }) => {
                 <TextInput
                     style={styles.textInput}
                     placeholder='Cari nama, bank, atau nominal'
+                    onChangeText={(value) => {
+                        _searchFilterFunction(value, data);
+                    }
+                    }
+
                 />
                 <TouchableOpacity
                     onPress={() => setModalVisible(true)}
@@ -136,17 +197,20 @@ const Transaction = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
-            <FlatList
-                showsVerticalScrollIndicator={false}
-                keyExtractor={(item) => item.id}
-                data={data}
-                renderItem={({ item, index }) => (
-                    <BasicPage
-                        item={item}
-                        onPress={() => navigation.navigate('Detail')}
-                    />
-                )}
-            />
+            <View style={{ height: '100%', paddingBottom: 60 }}>
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    keyExtractor={(item) => item.id}
+                    data={filteredData}
+                    renderItem={({ item, index }) => (
+                        <BasicPage
+                            item={item}
+                            onPress={() => navigation.navigate('Detail', item)}
+                        />
+                    )}
+                />
+            </View>
+
         </View>
     )
 }

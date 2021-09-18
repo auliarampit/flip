@@ -3,34 +3,32 @@ import { View, Text, Modal, StyleSheet, Image, TouchableOpacity } from 'react-na
 import radioButton from '../assets/icons/radioButton1.jpeg'
 import radioButton2 from '../assets/icons/radioButton2.jpeg'
 
-const ModalComp = ({ modalVisible, closeModal }) => {
-    const [id, setId] = useState(1)
-
-    const action = (item) => {
-        setId(item)
-        closeModal()
-    }
-
+const ModalComp = ({ modalVisible, closeModal, AtoZ, ZtoA, newDate, oldDate, sort, id }) => {
     const data = [
         {
             id: 1,
             name: 'URUTKAN',
+            onPress: sort,
         },
         {
             id: 2,
             name: 'Nama A-Z',
+            onPress: AtoZ,
         },
         {
             id: 3,
             name: 'Nama Z-A',
+            onPress: ZtoA,
         },
         {
             id: 4,
             name: 'Tanggal Terbaru',
+            onPress: newDate,
         },
         {
             id: 5,
             name: 'Tanggal Terlama',
+            onPress: oldDate,
         },
     ]
     return (
@@ -47,7 +45,7 @@ const ModalComp = ({ modalVisible, closeModal }) => {
                             data.map((item) => {
                                 return (
                                     <View style={styles.row}>
-                                        <TouchableOpacity onPress={() => action(item.id)}>
+                                        <TouchableOpacity onPress={() => item.onPress(item.id)}>
                                             <Image
                                                 style={styles.img}
                                                 source={item.id === id ? radioButton : radioButton2}
