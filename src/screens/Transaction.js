@@ -11,15 +11,17 @@ import {
 import arrow from '../assets/icons/arrow.png'
 import arrowDown from '../assets/icons/arrowDown.png'
 import search from '../assets/icons/search.png'
+import LoadingComp from '../components/Loading'
 import ModalComp from '../components/Modal'
 import config from '../configs'
 import CurrencyFormat from '../helpers/CurrencyFormat'
-import CustomDateTime from '../helpers/DateTime'
+import CustomDateTime from '../helpers/CustomDateTime'
 
 const Transaction = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const [data, setData] = useState(null)
-    // const [date_time, setDate_time] = useState(null)
+    const [filteredData, setFilteredData] = useState(data);
     const [id, setId] = useState(1)
 
     useEffect(() => {
@@ -33,15 +35,14 @@ const Transaction = ({ navigation }) => {
             .then((json) => {
                 setData(Object.values(json))
                 setFilteredData(Object.values(json))
-                // CustomDateTime(data, setDate_time)
                 setId(1)
-                console.log(Object.values(json));
+                setIsLoading(false)
             })
             .catch((error) => {
                 console.error(error);
             });
-            
-        };
+
+    };
 
     const SetSorting = (item) => {
         setId(item)
@@ -55,7 +56,7 @@ const Transaction = ({ navigation }) => {
             let end = b.beneficiary_name.toUpperCase();
             return (start < end) ? -1 : (start > end) ? 1 : 0;
         });
-        setData(data)
+        setFilteredData(data)
         setId(item)
         closeModal()
     }
@@ -66,7 +67,7 @@ const Transaction = ({ navigation }) => {
             let end = b.beneficiary_name.toUpperCase();
             return (start > end) ? -1 : (start < end) ? 1 : 0;
         });
-        setData(data)
+        setFilteredData(data)
         setId(item)
         closeModal()
     }
@@ -77,7 +78,7 @@ const Transaction = ({ navigation }) => {
             let end = b.completed_at.toUpperCase();
             return (start < end) ? -1 : (start > end) ? 1 : 0;
         });
-        setData(data)
+        setFilteredData(data)
         setId(item)
         closeModal()
     }
@@ -88,13 +89,10 @@ const Transaction = ({ navigation }) => {
             let end = b.completed_at.toUpperCase();
             return (start > end) ? -1 : (start < end) ? 1 : 0;
         });
-        setData(data)
+        setFilteredData(data)
         setId(item)
         closeModal()
     }
-
-
-    let [filteredData, setFilteredData] = useState(data);
 
     function _searchFilterFunction(searchText, data) {
         let newData = [];
@@ -118,12 +116,12 @@ const Transaction = ({ navigation }) => {
         }
     }
 
-    console.log(filteredData)
-
-
-
     const closeModal = () => {
         setModalVisible(false)
+    }
+
+    const closeModalLoading = () => {
+        setIsLoading(false)
     }
 
     const BasicPage = ({ item, onPress }) => {
@@ -210,6 +208,10 @@ const Transaction = ({ navigation }) => {
                     )}
                 />
             </View>
+            <LoadingComp
+                modalVisible={isLoading}
+                closeModal={closeModalLoading}
+            />
 
         </View>
     )
@@ -217,7 +219,6 @@ const Transaction = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        // backgroundColor: 'rgb(251, 251, 251)',
         paddingHorizontal: 7,
         paddingVertical: 16,
         paddingBottom: 60,
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
     status: {
         paddingHorizontal: 10,
         paddingVertical: 4,
-        borderWidth: 0.5,
+        borderWidth: 1,
         borderRadius: 5,
         borderColor: 'orangered'
     },

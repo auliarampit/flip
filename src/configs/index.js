@@ -12,14 +12,9 @@ const base = {
   
   if (!__DEV__) {
     config = prd;
-    // } else if (Constants.isDevice) {
-    // 	config = Dev
   } else {
     config = dev;
   }
-  
-  //config = Dev
-  //config = Prod
   
   config = Object.assign({}, base, config);
   

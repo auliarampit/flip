@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View, Text, Modal, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import radioButton from '../assets/icons/radioButton1.jpeg'
 import radioButton2 from '../assets/icons/radioButton2.jpeg'
@@ -44,15 +44,15 @@ const ModalComp = ({ modalVisible, closeModal, AtoZ, ZtoA, newDate, oldDate, sor
                         {
                             data.map((item) => {
                                 return (
-                                    <View style={styles.row}>
-                                        <TouchableOpacity onPress={() => item.onPress(item.id)}>
+                                    <TouchableOpacity onPress={() => item.onPress(item.id)}>
+                                        <View style={styles.row}>
                                             <Image
                                                 style={styles.img}
                                                 source={item.id === id ? radioButton : radioButton2}
                                             />
-                                        </TouchableOpacity>
-                                        <Text style={styles.modalText}>{item.name}</Text>
-                                    </View>
+                                            <Text style={styles.modalText}>{item.name}</Text>
+                                        </View>
+                                    </TouchableOpacity>
                                 )
                             })
                         }
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: 'rgba(0, 0, 0, 0.3)'
+        backgroundColor: 'rgba(0, 0, 0, 0.4)'
     },
     modalView: {
         margin: 10,
@@ -77,14 +77,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 20,
         alignItems: "flex-start",
-        //   shadowColor: "#000",
-        //   shadowOffset: {
-        //     width: 0,
-        //     height: 2
-        //   },
-        //   shadowOpacity: 0.25,
-        //   shadowRadius: 4,
-        //   elevation: 5
     },
     row: {
         flexDirection: 'row',
