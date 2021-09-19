@@ -18,10 +18,10 @@ that is required to be installed
   `$ yarn ios`
 
 ## Datetime
-<https://github.com/auliarampit/flip/blob/master/src/assets/images/datetime.jpeg' />
+<img src= 'https://github.com/auliarampit/flip/blob/master/src/assets/images/datetime.jpeg' />
 
 ## Searching
-<https://github.com/auliarampit/flip/blob/master/src/assets/images/searching.jpeg' />
+<img src= 'https://github.com/auliarampit/flip/blob/master/src/assets/images/searching.jpeg' />
 
 ## Searching
-<https://github.com/auliarampit/flip/blob/master/src/assets/images/sorting.jpeg' />
+<img src= 'https://github.com/auliarampit/flip/blob/master/src/assets/images/sorting.jpeg' />
