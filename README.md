@@ -23,5 +23,9 @@ that is required to be installed
 ## Searching
 <img src= 'https://github.com/auliarampit/flip/blob/master/src/assets/images/searching.jpeg' />
 
-## Searching
+## Sorting A-Z, Z-A, Tanggal Terbaru, Tanggal Terlama
 <img src= 'https://github.com/auliarampit/flip/blob/master/src/assets/images/sorting.jpeg' />
+
+## Information Project
+- `$ React native version ~0.63.4`
+- `$ React Navigation version 6.0.2`
