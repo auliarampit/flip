@@ -8,7 +8,7 @@ that is required to be installed
 - Emulator/Simulator
 
 ## Clone or download
-- `$ Apk Demo `
+- `$ Apk Demo https://drive.google.com/file/d/16hcp17P7qXXgt14fJiUJI9LUMfMGVXx8/view?usp=sharing`
 - `$ git clone https://github.com/auliarampit/flip.git`
 - `$ cd flip`
 - `$ npm install`
